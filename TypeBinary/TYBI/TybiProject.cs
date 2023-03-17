@@ -1,16 +1,25 @@
 using Tomlet;
+using Tomlet.Models;
 
 namespace TypeBinary.TYBI;
 
 public class TybiProject
 {
-    public TybiProject()
+    private TomlDocument toml;
+
+    public TybiProject(TomlDocument document)
     {
-        
+        toml = document;
     }
 
-    public static TybiProject? OpenProject()
+    public TybiProject() : this(TomlDocument.CreateEmpty())
     {
 
+    }
+
+    public static TybiProject OpenProject(string path)
+    {
+        var doc = TomlParser.ParseFile(path);
+        return new TybiProject(doc);
     }
 }
