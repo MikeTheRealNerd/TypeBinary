@@ -1,14 +1,12 @@
-using Tomlet.Models;
+using Newtonsoft.Json.Linq;
 
-namespace TypeBinary.TYBI;
+namespace TypeBinary;
 
 public class TybiType
 {
-    private 
-
-    internal TybiType()
+    internal TybiType(JToken json)
     {
-
+        
     }
 
     public string Name { get; set; }

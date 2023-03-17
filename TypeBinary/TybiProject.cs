@@ -1,7 +1,7 @@
 using Newtonsoft.Json.Linq;
 using System.Collections.ObjectModel;
 
-namespace TypeBinary.TYBI;
+namespace TypeBinary;
 
 public class TybiProject
 {
