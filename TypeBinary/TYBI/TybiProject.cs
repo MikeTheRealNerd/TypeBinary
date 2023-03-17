@@ -1,15 +1,20 @@
-using Tomlet;
-using Tomlet.Models;
+using Newtonsoft.Json.Linq;
+using System.Collections.ObjectModel;
 
 namespace TypeBinary.TYBI;
 
 public class TybiProject
 {
-    private TomlDocument toml;
+    private List<TybiType> types = new();
 
-    public TybiProject(TomlDocument document)
+    public ReadOnlyCollection<TybiType> Types => types.AsReadOnly();
+
+    public TybiProject(JToken json)
     {
-        toml = document;
+        foreach (var type in json)
+        {
+            
+        }
     }
 
     public TybiProject() : this(TomlDocument.CreateEmpty())
