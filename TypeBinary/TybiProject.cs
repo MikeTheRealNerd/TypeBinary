@@ -9,22 +9,56 @@ public class TybiProject
 
     public ReadOnlyCollection<TybiType> Types => types.AsReadOnly();
 
-    public TybiProject(JToken json)
+    private TybiProject(JObject json)
     {
-        foreach (var type in json)
+        foreach (var type in json.Properties())
         {
-            
+            if (type.Value is not JObject typeObj)
+                continue;
+
+            types.Add(new(this, type.Name));
+        }
+
+        var properties = json.Properties().GetEnumerator();
+        for (var a = 0; a < types.Count; a++)
+        {
+            properties.MoveNext();
+            types[a].ParseProperties((JObject)properties.Current.Value);
         }
     }
 
-    public TybiProject() : this(TomlDocument.CreateEmpty())
+    public TybiProject() : this(new JObject())
     {
 
     }
 
     public static TybiProject OpenProject(string path)
     {
-        var doc = TomlParser.ParseFile(path);
+        var doc = JObject.Parse(path);
         return new TybiProject(doc);
+    }
+
+    public JObject ExportJson()
+    {
+        var obj = new JObject();
+
+        foreach (var type in Types)
+        {
+            var typeObj = new JObject();
+
+            foreach (var property in type.Properties)
+            {
+                typeObj.Add(property.Name, property.Type.Name);
+            }
+
+            obj.Add(type.Name, typeObj);
+        }
+
+        return obj;
+    }
+
+    public void Save(string path)
+    {
+        File.WriteAllText(path, ExportJson().ToString());
     }
 }
